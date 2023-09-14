@@ -58,7 +58,6 @@ def save_csv_file(data, csv_file_name, version=0, print_out=False):
 
 def save_pandas_csv_file(data, csv_file_name, version=0, print_out=False):
     msgs = data[1]
-    print(len(msgs))
     for i in range(len(msgs)):
         msgs[i]['time'] = data[0][i]
     df = pandas.DataFrame(data=msgs)

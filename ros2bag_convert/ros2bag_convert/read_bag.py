@@ -1,15 +1,9 @@
 import sqlite3
-import numpy as np
-from rcl_interfaces import msg
 from rosidl_runtime_py.utilities import get_message
 from rclpy.serialization import deserialize_message
-# import sys
-# sys.path.append("/home/ros2/rosbag2_csv/rosbag2/")
 from . import message_converter, save_csv_file
-import json
-import os
 
-import pandas
+import os
 
 def connect(sqlite_file):
     """ Make connection to an SQLite database file. """
@@ -218,8 +212,10 @@ def read_from_all_topics(bag_file, print_out=False):
 
     return data
 
-def read_write_from_all_topics(bag_file, print_out=False):
+def read_write_from_all_topics(bag_file, print_out=False, save_format='pandas'):
     """ Returns all timestamps and messages from all topics.
+
+        save_format: ['pandas', 'bin']
     """
     # Connect to the database
     connection, cursor = connect(bag_file)
@@ -240,9 +236,10 @@ def read_write_from_all_topics(bag_file, print_out=False):
         path, topic_name = "/".join(tmp[:-1]),tmp[-1]
         path = bag_file[:bag_file.rfind("/")]+""+path
         os.makedirs(path, exist_ok=True)
-        # save_csv_file.save_csv_file([timestamps, messages],path + "/" + topic_name.replace('/', '__')+".csv")
-        save_csv_file.save_pandas_csv_file([timestamps, messages],path + "/" + topic_name.replace('/', '__')+".csv")
-        pandas.DataFrame
+        if save_format == 'bin':
+            save_csv_file.save_csv_file([timestamps, messages], path + "/" + topic_name.replace('/', '__') + ".csv")
+        else:
+            save_csv_file.save_pandas_csv_file([timestamps, messages],path + "/" + topic_name.replace('/', '__')+".csv")
 
     # Close connection to the database
     close(connection)
