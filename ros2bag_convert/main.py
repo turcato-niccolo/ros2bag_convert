@@ -1,4 +1,4 @@
-from .ros2bag_convert import read_bag
+from ros2bag_convert import read_bag
 import sys, os
 
 argvs = sys.argv

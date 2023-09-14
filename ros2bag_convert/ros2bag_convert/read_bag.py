@@ -9,6 +9,8 @@ from . import message_converter, save_csv_file
 import json
 import os
 
+import pandas
+
 def connect(sqlite_file):
     """ Make connection to an SQLite database file. """
     connection = sqlite3.connect(sqlite_file)
@@ -238,7 +240,9 @@ def read_write_from_all_topics(bag_file, print_out=False):
         path, topic_name = "/".join(tmp[:-1]),tmp[-1]
         path = bag_file[:bag_file.rfind("/")]+""+path
         os.makedirs(path, exist_ok=True)
-        save_csv_file.save_csv_file([timestamps, messages],path + "/" + topic_name+".csv")
+        # save_csv_file.save_csv_file([timestamps, messages],path + "/" + topic_name.replace('/', '__')+".csv")
+        save_csv_file.save_pandas_csv_file([timestamps, messages],path + "/" + topic_name.replace('/', '__')+".csv")
+        pandas.DataFrame
 
     # Close connection to the database
     close(connection)

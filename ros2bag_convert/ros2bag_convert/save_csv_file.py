@@ -1,8 +1,8 @@
-
 import csv
 import json
 import time
 import numpy as np
+import pandas
 
 def save_csv_file(data, csv_file_name, version=0, print_out=False):
     """ Save data to a csv_file_name (use it after 'read_from_all_topics').
@@ -54,3 +54,13 @@ def save_csv_file(data, csv_file_name, version=0, print_out=False):
 
     # if print_out:
     print('Saving', csv_file_name)
+
+
+def save_pandas_csv_file(data, csv_file_name, version=0, print_out=False):
+    msgs = data[1]
+    print(len(msgs))
+    for i in range(len(msgs)):
+        msgs[i]['time'] = data[0][i]
+    df = pandas.DataFrame(data=msgs)
+
+    df.to_csv(csv_file_name)
